@@ -1,31 +1,43 @@
-.homepage {
-  /* Original styles for homepage */
-}
-
 .hero {
-  /* Original styles for hero */
-}
-
-.lead {
-  /* Original styles for lead */
-}
-
-.status-note {
-  /* Original styles for status-note */
-}
-
-.sections {
-  /* Original styles for sections */
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
 }
 
 .card-grid {
-  /* Original styles for card-grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 .card-link {
-  /* Original styles for card-link */
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    transition: 0.3s;
 }
 
-@media (min-width: 481px) {
-  /* Original desktop media queries */
+.card-link:hover {
+    border-color: #007bff;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .hero {
+        padding: 10px;
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        font-size: 14px;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
 }
