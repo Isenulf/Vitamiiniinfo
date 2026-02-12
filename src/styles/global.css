@@ -51,6 +51,9 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.7;
+	overflow-x: hidden;
+	width: 100%;
+	max-width: 100%;
 }
 main {
 	flex: 1;
@@ -68,6 +71,8 @@ h6 {
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
 	line-height: 1.2;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
 h1 {
 	font-size: 3.052em;
@@ -96,6 +101,8 @@ a:hover {
 }
 p {
 	margin-bottom: 1em;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
 .prose p {
 	margin-bottom: 2em;
@@ -109,6 +116,8 @@ input {
 }
 table {
 	width: 100%;
+	overflow-x: auto;
+	display: block;
 }
 img {
 	max-width: 100%;
@@ -123,6 +132,7 @@ code {
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	overflow-x: auto;
 }
 pre > code {
 	all: unset;
@@ -133,7 +143,7 @@ blockquote {
 	margin: 0;
 	font-size: 1.333em;
 }
-hr {
+r {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
@@ -143,6 +153,31 @@ hr {
 	}
 	main {
 		padding: 1em;
+	}
+}
+
+@media (max-width: 480px) {
+	body {
+		font-size: 16px;
+	}
+	main {
+		padding: 0.75em;
+		width: 100%;
+	}
+	h1 {
+		font-size: 1.953em;
+	}
+	h2 {
+		font-size: 1.563em;
+	}
+	h3 {
+		font-size: 1.25em;
+	}
+	h4 {
+		font-size: 1.125em;
+	}
+	p {
+		font-size: 0.95em;
 	}
 }
 
