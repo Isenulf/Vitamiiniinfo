@@ -20,7 +20,7 @@ npm create astro@latest -- --template blog
 
 <!-- ASTRO:REMOVE:END -->
 
-Features:
+Features:.
 
 - ✅ Minimal styling (make it your own!)
 - ✅ 100/100 Lighthouse performance
