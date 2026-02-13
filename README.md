@@ -1,76 +1,152 @@
-# Astro Starter Kit: Blog
+# Vitamiiniinfo.ee — простая документация для загрузки статей
 
-```sh
-npm create astro@latest -- --template blog
-```
+Ниже — инструкция для редактора: как добавлять новые статьи **через папки и файлы** в `src/pages`.
 
-<!-- ASTRO:REMOVE:START -->
+---
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+## 1) Главный принцип
 
-<!-- ASTRO:REMOVE:END -->
+В этом проекте статьи = отдельные файлы в структуре GitHub.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-<!-- ASTRO:REMOVE:START -->
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
-<!-- ASTRO:REMOVE:END -->
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+Пример:
 
 ```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+src/pages/
+  vitamiinid/
+    d-vitamiin/
+      index.md
+      puudus.md
+      kasulikkus.md
+
+  mineraalid/
+    magneesium/
+      index.md
+
+  kasulik-info-ja-uudised/
+    praktiline-terviseinfo/
+      uni-ja-taastumine.md
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- `index.md` обычно основной (pillar) материал.
+- Дополнительные статьи можно хранить рядом (`puudus.md`, `kasulikkus.md` и т.д.).
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+---
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## 2) Какие типы статей есть
 
-Any static assets, like images, can be placed in the `public/` directory.
+Во frontmatter у статьи есть `type`:
 
-## 🧞 Commands
+- `pillar` — главная статья по теме
+- `supporting` — дополнительная статья по теме
+- `uudis` — новость
+- `praktiline` — практическая статья
 
-All commands are run from the root of the project, from a terminal:
+Раздел задаётся полем `section`:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- `vitamiinid`
+- `mineraalid`
+- `toidulisandid`
+- `kasulik-info-ja-uudised`
 
-## 👀 Want to learn more?
+---
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 3) Шаблон новой статьи (как ты и хотел)
 
-## Credit
+```md
+---
+layout: ../../../layouts/ArticlePage.astro
+title: "C-vitamiini uus annustamise soovitus"
+description: "Короткое описание статьи"
+section: "kasulik-info-ja-uudised"
+type: "uudis"
+categorySlug: "uudised"
+date: "2026-02-02"
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+topics:
+  - c-vitamiin
+
+cluster: true
+seoTitle: "C-vitamiini uus annustamise soovitus | Vitamiiniinfo.ee"
+seoDescription: "Короткое SEO-описание"
+---
+
+<h1>C-vitamiini uus annustamise soovitus</h1>
+<p>Siin algab artikli sisu…</p>
+```
+
+---
+
+## 4) Важные поля frontmatter
+
+Обязательные:
+- `layout`
+- `title`
+- `section`
+- `type`
+- `date` (формат `YYYY-MM-DD`)
+- `topics` (массив)
+
+Очень желательно:
+- `description`
+- `seoTitle`
+- `seoDescription`
+
+Дополнительно:
+- `categorySlug`: только для блока `kasulik-info-ja-uudised`
+  - `uudised` или `praktiline-terviseinfo`
+- `mainGuide`: для `supporting` статьи ссылка на основной материал, например:
+  - `mainGuide: "/vitamiinid/c-vitamiin/"`
+
+---
+
+## 5) Как работает перелинковка
+
+Перелинковка строится автоматически на основе:
+- `topics`
+- `type`
+- `section`
+- `mainGuide` (для supporting)
+
+То есть вручную блоки “Seotud teemad / Uudised / Praktilised artiklid” прописывать не нужно.
+
+---
+
+## 6) Быстрый алгоритм добавления статьи
+
+1. Создай нужную папку и файл в `src/pages/...`.
+2. Вставь frontmatter + текст статьи.
+3. Проверь, что `section`, `type`, `topics` заполнены корректно.
+4. Запусти локальную проверку:
+
+```bash
+npm run build
+```
+
+Если build прошёл — маршрут и страница собраны корректно.
+
+---
+
+## 7) Полезные примеры из проекта
+
+- Основная статья:
+  - `src/pages/vitamiinid/d-vitamiin/index.md`
+- Supporting-статья:
+  - `src/pages/vitamiinid/c-vitamiin/puudus.md`
+- Новость:
+  - `src/pages/kasulik-info-ja-uudised/uudised/c-vitamiini-uus-annustamise-soovitus.md`
+- Практическая статья:
+  - `src/pages/kasulik-info-ja-uudised/praktiline-terviseinfo/5-koige-olulisemat-vitamiini-talvel.md`
+
+---
+
+## 8) Команды
+
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+---
+
+Если хочешь, следующим шагом сделаю ещё и **готовый пустой шаблон-файл** `article-template.md`, чтобы ты просто копировал его и менял поля.

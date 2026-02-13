@@ -1,0 +1,13 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { articlesBySection, buildBreadcrumbs } from '../../../data/articles';
+
+const items = articlesBySection('kasulik-info-ja-uudised').filter((entry) => entry.type === 'uudis');
+---
+<SiteLayout title="Uudised | Vitamiiniinfo.ee" description="Teadusuuringutel põhinevad terviseuudised." canonical="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/uudised/">
+  <Breadcrumbs items={buildBreadcrumbs('/kasulik-info-ja-uudised/uudised/')} />
+  <h1>Uudised</h1>
+  <div class="grid cols-2">{items.map((article) => <ArticleCard article={article} />)}</div>
+</SiteLayout>

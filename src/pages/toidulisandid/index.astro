@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { articlesBySection, buildBreadcrumbs, sectionMeta } from '../../data/articles';
+
+const items = articlesBySection('toidulisandid').filter((entry) => entry.type === 'pillar');
+---
+<SiteLayout title="Toidulisandid | Vitamiiniinfo.ee" description={sectionMeta.toidulisandid.description} canonical="https://vitamiiniinfo.ee/toidulisandid/">
+  <Breadcrumbs items={buildBreadcrumbs('/toidulisandid/')} />
+  <h1>Toidulisandid</h1>
+  <p>{sectionMeta.toidulisandid.description}</p>
+  <div class="grid cols-2">{items.map((article) => <ArticleCard article={article} />)}</div>
+</SiteLayout>

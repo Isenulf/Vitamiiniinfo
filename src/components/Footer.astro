@@ -1,16 +1,22 @@
----
-const currentYear = new Date().getFullYear();
----
-
-<footer>
-	&copy; {currentYear} Vitamiiniinfo.ee
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <p class="brand"><span aria-hidden="true">🍊</span> Vitamiiniinfo</p>
+      <p>Teaduspõhine info vitamiinide, mineraalide ja toidulisandite kohta.</p>
+    </div>
+    <div>
+      <h2>Sektsioonid</h2>
+      <a href="/vitamiinid/">Vitamiinid</a>
+      <a href="/mineraalid/">Mineraalid</a>
+      <a href="/toidulisandid/">Toidulisandid</a>
+      <a href="/kasulik-info-ja-uudised/">Kasulik info</a>
+    </div>
+    <div>
+      <h2>Info</h2>
+      <a href="/about/">Meist</a>
+      <a href="/privacy/">Privaatsuspoliitika</a>
+      <a href="/kontakt/">Kontakt</a>
+    </div>
+  </div>
+  <p class="copyright">© 2026 Vitamiiniinfo.ee</p>
 </footer>
-<style>
-	footer {
-		padding: 1.45em 1em 1.75em;
-		color: #835a3f;
-		text-align: center;
-		border-top: 1px solid rgba(var(--gray), 0.25);
-		background: #f2efec;
-	}
-</style>

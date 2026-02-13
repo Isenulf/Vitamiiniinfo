@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { articlesBySection, buildBreadcrumbs, sectionMeta } from '../../data/articles';
+
+const items = articlesBySection('vitamiinid').filter((entry) => entry.type === 'pillar');
+---
+<SiteLayout title="Vitamiinid | Vitamiiniinfo.ee" description={sectionMeta.vitamiinid.description} canonical="https://vitamiiniinfo.ee/vitamiinid/">
+  <Breadcrumbs items={buildBreadcrumbs('/vitamiinid/')} />
+  <h1>Vitamiinid</h1>
+  <p>{sectionMeta.vitamiinid.description}</p>
+  <div class="grid cols-2">{items.map((article) => <ArticleCard article={article} />)}</div>
+</SiteLayout>
