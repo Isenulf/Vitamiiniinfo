@@ -1,6 +1,6 @@
 ---
 layout: ../../../layouts/ArticlePage.astro
-title: "C-vitamiin – täielik juhend"
+title: "C-vitamiin"
 description: "Kõik, mida pead teadma C-vitamiinist: funktsioonid, allikad, päevane annus ja puuduse mõju tervisele."
 section: "vitamiinid"
 type: "pillar"
