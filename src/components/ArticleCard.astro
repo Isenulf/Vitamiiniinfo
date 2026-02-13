@@ -1,0 +1,13 @@
+---
+import { formatDate, type ArticleMeta } from '../data/articles';
+const { article } = Astro.props as { article: ArticleMeta };
+const href = article.url;
+---
+
+<article class="card">
+  <a href={href}>
+    <p class="meta"><span class="tag">{article.type}</span> {formatDate(article.date)}</p>
+    <h3>{article.title}</h3>
+    <p>{article.description}</p>
+  </a>
+</article>

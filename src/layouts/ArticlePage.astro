@@ -1,0 +1,52 @@
+---
+import SiteLayout from './SiteLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { buildBreadcrumbs, getArticleByUrl, getSupportingForGuide, relatedForArticle } from '../data/articles';
+
+const { frontmatter } = Astro.props;
+const pageUrl = `${Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`}`;
+const current = getArticleByUrl(pageUrl);
+const related = current ? relatedForArticle(current) : [];
+const news = related.filter((entry) => entry.type === 'uudis');
+const practical = related.filter((entry) => entry.type === 'praktiline');
+const moreSame = current?.type === 'supporting' && current.mainGuide
+  ? getSupportingForGuide(current.mainGuide).filter((entry) => entry.url !== current.url)
+  : [];
+const supporting = current?.type === 'pillar' ? getSupportingForGuide(current.url) : [];
+const mainGuide = current?.mainGuide ? getArticleByUrl(current.mainGuide) : null;
+const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
+---
+
+<SiteLayout title={frontmatter.seoTitle || frontmatter.title} description={frontmatter.seoDescription || frontmatter.description || frontmatter.title} canonical={canonical} type="article">
+  <Breadcrumbs items={buildBreadcrumbs(pageUrl)} />
+  <article class="article">
+    <h1>{frontmatter.title}</h1>
+    {frontmatter.description && <p>{frontmatter.description}</p>}
+    {mainGuide && <aside class="main-guide"><p>Peamine juhend</p><a href={mainGuide.url}>{mainGuide.title}</a></aside>}
+    <slot />
+  </article>
+
+  {supporting.length > 0 && (
+    <section>
+      <h2>Loe lisaks vitamiini kohta</h2>
+      <div class="grid cols-2">{supporting.map((entry) => <ArticleCard article={entry} />)}</div>
+    </section>
+  )}
+
+  {moreSame.length > 0 && (
+    <section>
+      <h2>Rohkem sama vitamiini kohta</h2>
+      <div class="grid cols-2">{moreSame.map((entry) => <ArticleCard article={entry} />)}</div>
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section>
+      <h2>Seotud teemad</h2>
+      <div class="grid cols-3">{related.map((entry) => <ArticleCard article={entry} />)}</div>
+      {news.length > 0 && <><h2>Uudised selle teema kohta</h2><div class="grid cols-2">{news.map((entry) => <ArticleCard article={entry} />)}</div></>}
+      {practical.length > 0 && <><h2>Praktilised artiklid</h2><div class="grid cols-2">{practical.map((entry) => <ArticleCard article={entry} />)}</div></>}
+    </section>
+  )}
+</SiteLayout>

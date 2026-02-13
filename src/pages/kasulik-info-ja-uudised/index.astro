@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { articlesBySection, buildBreadcrumbs, sectionMeta } from '../../data/articles';
+
+const latest = articlesBySection('kasulik-info-ja-uudised').sort((a, b) => +new Date(b.date) - +new Date(a.date));
+---
+<SiteLayout title="Kasulik info ja uudised | Vitamiiniinfo.ee" description={sectionMeta['kasulik-info-ja-uudised'].description} canonical="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/">
+  <Breadcrumbs items={buildBreadcrumbs('/kasulik-info-ja-uudised/')} />
+  <h1>Kasulik info ja uudised</h1>
+  <p>{sectionMeta['kasulik-info-ja-uudised'].description}</p>
+  <div class="grid cols-2">
+    <a class="tile" href="/kasulik-info-ja-uudised/uudised/"><h2>Uudised</h2><p>Viimased tervise- ja toitumisuuringute uudised.</p></a>
+    <a class="tile" href="/kasulik-info-ja-uudised/praktiline-terviseinfo/"><h2>Praktiline terviseinfo</h2><p>Praktilised juhendid igapäevase tervisekäitumise toetamiseks.</p></a>
+  </div>
+  <h2>Viimased artiklid</h2>
+  <div class="grid cols-2">{latest.map((article) => <ArticleCard article={article} />)}</div>
+</SiteLayout>

@@ -1,74 +1,77 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import '../styles/main.css';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { latestArticles, sectionMeta } from '../data/articles';
 
-const pageTitle = 'Vitamiinide info ja tervisenõuanded | Vitamiiniinfo.ee';
-const pageDescription =
-	'Usaldusväärne info vitamiinide, mineraalide ja toidulisandite kohta. Praktilised tervisenõuanded ja teaduspõhine sisu.';
-const canonical = 'https://vitamiiniinfo.ee/';
-
-const sectionCards = [
-	{
-		title: 'Vitamiinid',
-		description: 'Ülevaated vitamiinidest, nende rollist organismis ja teaduspõhistest soovitustest.',
-		href: '#',
-	},
-	{
-		title: 'Mineraalid',
-		description: 'Selgitused mineraalainete tähtsusest ning nende tasakaalu toetamisest igapäevaelus.',
-		href: '#',
-	},
-	{
-		title: 'Toidulisandid',
-		description: 'Praktiline teave toidulisandite valiku, kasutamise ja ohutuse kohta.',
-		href: '#',
-	},
-	{
-		title: 'Terviseuudised',
-		description: 'Ajakohased terviseteemad ja kokkuvõtted uutest uuringutest arusaadavas vormis.',
-		href: '#',
-	},
-];
+const sections = Object.values(sectionMeta);
+const featuredArticles = latestArticles.slice(0, 4);
 ---
 
-<!doctype html>
-<html lang="et">
-	<head>
-		<BaseHead title={pageTitle} description={pageDescription} canonical={canonical} ogUrl={canonical} ogType="website" />
-	</head>
-	<body>
-		<main class="homepage">
-			<section class="hero" aria-labelledby="avaleht-title">
-				<h1 id="avaleht-title">Vitamiiniinfo.ee – vitamiinide ja terviseinfo keskkond</h1>
-				<p class="lead">
-					Vitamiiniinfo.ee on loodud selleks, et pakkuda selget, usaldusväärset ja teaduspõhist infot
-					vitamiinide, mineraalide ning tervislike harjumuste kohta. Meie eesmärk on aidata sul teha
-					teadlikke otsuseid oma tervise toetamiseks – lihtsalt, arusaadavalt ja ilma liigse müra või
-					eksitava reklaamita.
-				</p>
-				<p class="status-note">
-					Leht on hetkel aktiivses arenduses. Lisame järk-järgult põhjalikke artikleid, praktilisi
-					soovitusi ning ajakohast terviseinfot.
-				</p>
-			</section>
+<SiteLayout
+  title="Vitamiiniinfo.ee – teaduspõhine terviseportaal"
+  description="Vitamiinid, mineraalid, toidulisandid ja praktiline terviseinfo usaldusväärses, SEO-first teadmistebaasis."
+  canonical="https://vitamiiniinfo.ee/"
+>
+  <section class="hero">
+    <p class="hero-icon" aria-hidden="true">🍊</p>
+    <h1>Teaduspõhine info vitamiinide ja toidulisandite kohta</h1>
+    <p>Vitamiiniinfo.ee on autoriteetne teadmistebaas, mis ühendab vitamiinid, mineraalid, toidulisandid ja praktilise terviseinfo selgeks tervikuks.</p>
+  </section>
 
-			<section class="sections" aria-labelledby="sections-title">
-				<h2 id="sections-title">Peamised teemad</h2>
-				<ul class="card-grid">
-					{
-						sectionCards.map((card) => (
-							<li>
-								<a class="card-link" href={card.href}>
-									<h3>{card.title}</h3>
-									<p>{card.description}</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+  <section>
+    <h2>Avasta teemad</h2>
+    <div class="grid cols-4">
+      {sections.map((section) => (
+        <a class="tile" href={section.href}>
+          {
+            section.href === '/vitamiinid/' && (
+              <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            )
+          }
+          {
+            section.href === '/mineraalid/' && (
+              <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M11 3 8 9l4 13 4-13-3-6"></path><path d="M2 9h20"></path></svg>
+            )
+          }
+          {
+            section.href === '/toidulisandid/' && (
+              <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path><path d="M8.5 2h7"></path><path d="M7 16h10"></path></svg>
+            )
+          }
+          {
+            section.href === '/kasulik-info-ja-uudised/' && (
+              <svg class="section-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+            )
+          }
+          <h3>{section.title}</h3>
+          <p>{section.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2>Viimased artiklid</h2>
+    <div class="grid cols-4">
+      {featuredArticles.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+
+  <section class="trust">
+    <article>
+      <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+      <h3>Teaduspõhine info</h3>
+      <p>Kõik artiklid põhinevad teaduslikel allikatel.</p>
+    </article>
+    <article>
+      <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+      <h3>Struktureeritud teadmistebaas</h3>
+      <p>Süstemaatiline ja hõlpsasti navigeeritav sisu.</p>
+    </article>
+    <article>
+      <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path><path d="M8.5 2h7"></path><path d="M7 16h10"></path></svg>
+      <h3>Regulaarselt uuendatud</h3>
+      <p>Hoiame sisu ajakohasena vastavalt uusimatele uuringutele.</p>
+    </article>
+  </section>
+</SiteLayout>
