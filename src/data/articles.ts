@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-export type ArticleSection = 'vitamiinid' | 'mineraalid' | 'toidulisandid' | 'kasulik-info-ja-uudised';
+export type ArticleSection = 'vitamiinid' | 'mineraalained' | 'toidulisandid' | 'kasulik-info-ja-uudised';
 export type ArticleType = 'pillar' | 'supporting' | 'uudis' | 'praktiline';
 
 export interface ArticleMeta {
@@ -19,14 +19,14 @@ export interface ArticleMeta {
 
 const sectionDescriptions: Record<ArticleSection, string> = {
   vitamiinid: 'Kõik, mida pead teadma vitamiinidest – nende rollist organismis, puuduse sümptomitest ja parimatest allikatest.',
-  mineraalid: 'Olulised mineraalid, nende mõju tervisele ning praktilised soovitused tasakaalu hoidmiseks.',
+  mineraalained: 'Olulised mineraalained, nende mõju tervisele ning praktilised soovitused tasakaalu hoidmiseks.',
   toidulisandid: 'Tasakaalukas ülevaade toidulisanditest, annustamisest ja teadlikust kasutamisest.',
   'kasulik-info-ja-uudised': 'Uudised teadusuuringutest ning praktilised terviseartiklid igapäevaseks otsustamiseks.',
 };
 
 export const sectionMeta: Record<ArticleSection, { title: string; description: string; icon: string; href: string }> = {
   vitamiinid: { title: 'Vitamiinid', description: sectionDescriptions.vitamiinid, icon: 'vitamiinid', href: '/vitamiinid/' },
-  mineraalid: { title: 'Mineraalid', description: sectionDescriptions.mineraalid, icon: 'mineraalid', href: '/mineraalid/' },
+  mineraalained: { title: 'Mineraalained', description: sectionDescriptions.mineraalained, icon: 'mineraalained', href: '/mineraalained/' },
   toidulisandid: { title: 'Toidulisandid', description: sectionDescriptions.toidulisandid, icon: 'toidulisandid', href: '/toidulisandid/' },
   'kasulik-info-ja-uudised': {
     title: 'Kasulik info ja uudised',

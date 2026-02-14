@@ -1,5 +1,5 @@
 export type ArticleType = 'pillar' | 'supporting' | 'uudis' | 'praktiline';
-export type SectionKey = 'vitamiinid' | 'mineraalid' | 'toidulisandid' | 'kasulik-info-ja-uudised';
+export type SectionKey = 'vitamiinid' | 'mineraalained' | 'toidulisandid' | 'kasulik-info-ja-uudised';
 
 export interface Article {
   slug: string;
@@ -23,11 +23,11 @@ export const sectionMeta: Record<SectionKey, { title: string; description: strin
     icon: '☀️',
     href: '/vitamiinid/',
   },
-  mineraalid: {
-    title: 'Mineraalid',
-    description: 'Olulised mineraalid, nende mõju tervisele ning praktilised soovitused tasakaalu hoidmiseks.',
+  mineraalained: {
+    title: 'Mineraalained',
+    description: 'Olulised mineraalained, nende mõju tervisele ning praktilised soovitused tasakaalu hoidmiseks.',
     icon: '💎',
-    href: '/mineraalid/',
+    href: '/mineraalained/',
   },
   toidulisandid: {
     title: 'Toidulisandid',
@@ -99,7 +99,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'magneesium',
-    section: 'mineraalid',
+    section: 'mineraalained',
     title: 'Magneesium – põhjalik ülevaade',
     description: 'Magneesiumi roll lihastes, närvisüsteemis ja energiavahetuses.',
     date: '2026-01-18',
