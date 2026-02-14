@@ -1,3 +1,8 @@
+---
+import CookieConsent from './CookieConsent.astro';
+import CookieSettingsModal from './CookieSettingsModal.astro';
+---
+
 <footer class="site-footer">
   <div class="footer-grid">
     <div>
@@ -16,7 +21,34 @@
       <a href="/about/">Meist</a>
       <a href="/privacy/">Privaatsuspoliitika</a>
       <a href="/kontakt/">Kontakt</a>
+      <button type="button" class="cookie-settings-link" data-cookie-settings-trigger="true">Küpsiste seaded</button>
     </div>
   </div>
   <p class="copyright">© 2026 Vitamiiniinfo.ee</p>
 </footer>
+
+<CookieConsent />
+<CookieSettingsModal />
+
+<script is:inline>
+  (() => {
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.dataset.cookieSettingsTrigger !== 'true') return;
+      window.dispatchEvent(new CustomEvent('cookie-consent:open-settings'));
+    });
+  })();
+</script>
+
+<style>
+  .cookie-settings-link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+</style>
