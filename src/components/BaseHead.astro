@@ -154,6 +154,9 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
       const granted = Boolean(consent?.analytics);
       window.gtag('consent', 'update', {
         analytics_storage: granted ? 'granted' : 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
       });
 
       if (granted) {
