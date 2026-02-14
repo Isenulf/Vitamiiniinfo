@@ -24,22 +24,44 @@
 <script is:inline>
   (() => {
     const STORAGE_KEY = 'cookie-consent';
+    const COOKIE_NAME = 'cookie-consent';
     const modal = document.getElementById('cookie-settings-modal');
     const analyticsInput = document.getElementById('cookie-analytics');
 
     if (!modal || !(analyticsInput instanceof HTMLInputElement)) return;
 
-    const parseConsent = () => {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return { necessary: true, analytics: false };
-      if (stored === 'accepted') return { necessary: true, analytics: true };
-
-      try {
-        const parsed = JSON.parse(stored);
-        return { necessary: true, analytics: Boolean(parsed?.analytics) };
-      } catch {
-        return { necessary: true, analytics: false };
+    const getCookieValue = (name) => {
+      const encodedName = `${name}=`;
+      const parts = document.cookie.split(';');
+      for (const part of parts) {
+        const cookie = part.trim();
+        if (cookie.startsWith(encodedName)) {
+          return decodeURIComponent(cookie.slice(encodedName.length));
+        }
       }
+      return null;
+    };
+
+    const writeConsentCookie = (consent) => {
+      document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(consent))}; path=/; max-age=31536000; samesite=lax`;
+    };
+
+    const parseConsent = () => {
+      const sources = [localStorage.getItem(STORAGE_KEY), getCookieValue(COOKIE_NAME)];
+
+      for (const source of sources) {
+        if (!source) continue;
+        if (source === 'accepted') return { necessary: true, analytics: true };
+
+        try {
+          const parsed = JSON.parse(source);
+          return { necessary: true, analytics: Boolean(parsed?.analytics) };
+        } catch {
+          continue;
+        }
+      }
+
+      return { necessary: true, analytics: false };
     };
 
     const openModal = () => {
@@ -57,6 +79,7 @@
     const saveSelection = () => {
       const consent = { necessary: true, analytics: analyticsInput.checked };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
+      writeConsentCookie(consent);
       window.__updateCookieConsent?.(consent);
       window.dispatchEvent(new CustomEvent('cookie-consent:updated', { detail: consent }));
       closeModal();
