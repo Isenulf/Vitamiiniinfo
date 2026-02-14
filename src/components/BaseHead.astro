@@ -69,7 +69,6 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
 <script is:inline define:vars={{ cloudflareBeaconToken }}>
   (() => {
     const STORAGE_KEY = 'cookie-consent';
-    const CONSENT_COOKIE_KEY = 'cookie-consent';
     const CF_LOADER_ID = 'cf-analytics-loader';
 
     window.dataLayer = window.dataLayer || [];
@@ -84,30 +83,9 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
       ad_personalization: 'denied',
     });
 
-
-    const parseCookieConsent = () => {
-      const match = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(`${CONSENT_COOKIE_KEY}=`));
-
-      if (!match) return null;
-
-      const encoded = match.slice(CONSENT_COOKIE_KEY.length + 1);
-      try {
-        const parsed = JSON.parse(decodeURIComponent(encoded));
-        if (typeof parsed?.analytics === 'boolean') {
-          return { necessary: true, analytics: parsed.analytics };
-        }
-      } catch {
-        return null;
-      }
-
-      return null;
-    };
-
     const parseConsent = () => {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return parseCookieConsent();
+      if (!stored) return null;
       if (stored === 'accepted') return { necessary: true, analytics: true };
       try {
         const parsed = JSON.parse(stored);

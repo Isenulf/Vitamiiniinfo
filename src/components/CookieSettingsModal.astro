@@ -24,36 +24,14 @@
 <script is:inline>
   (() => {
     const STORAGE_KEY = 'cookie-consent';
-    const CONSENT_COOKIE_KEY = 'cookie-consent';
     const modal = document.getElementById('cookie-settings-modal');
-
-    const parseCookieConsent = () => {
-      const match = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(`${CONSENT_COOKIE_KEY}=`));
-
-      if (!match) return null;
-
-      const encoded = match.slice(CONSENT_COOKIE_KEY.length + 1);
-      try {
-        const parsed = JSON.parse(decodeURIComponent(encoded));
-        return { necessary: true, analytics: Boolean(parsed?.analytics) };
-      } catch {
-        return null;
-      }
-    };
-
-    const writeConsentCookie = (consent) => {
-      const maxAge = 60 * 60 * 24 * 365;
-      document.cookie = `${CONSENT_COOKIE_KEY}=${encodeURIComponent(JSON.stringify(consent))}; Path=/; Max-Age=${maxAge}; SameSite=Lax; Secure`;
-    };
     const analyticsInput = document.getElementById('cookie-analytics');
 
     if (!modal || !(analyticsInput instanceof HTMLInputElement)) return;
 
     const parseConsent = () => {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return parseCookieConsent() || { necessary: true, analytics: false };
+      if (!stored) return { necessary: true, analytics: false };
       if (stored === 'accepted') return { necessary: true, analytics: true };
 
       try {
@@ -79,7 +57,6 @@
     const saveSelection = () => {
       const consent = { necessary: true, analytics: analyticsInput.checked };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
-      writeConsentCookie(consent);
       window.__updateCookieConsent?.(consent);
       window.dispatchEvent(new CustomEvent('cookie-consent:updated', { detail: consent }));
       closeModal();
