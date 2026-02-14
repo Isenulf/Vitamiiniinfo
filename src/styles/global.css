@@ -60,34 +60,95 @@ p {
 .site-header {
   border-bottom: 1px solid var(--line);
   background: #fff;
+  position: relative;
 }
 
 .site-header nav {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0.95rem 1rem;
+  padding: 0.9rem 1rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
 }
 
+/* Brand */
 .brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
   text-decoration: none;
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-weight: 400;
-  font-size: 1.95rem;
-  color: var(--primary);
+  font-weight: 600;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  color: #F26A21;
+}
+
+/* Links (desktop) */
 .internal-links {
   display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
+
+/* Burger */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.burger span {
+  width: 22px;
+  height: 2px;
+  background: #222;
+  transition: 0.3s ease;
+}
+
+/* Burger animation */
+.burger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.burger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .burger {
+    display: flex;
+  }
+
+  .internal-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: none;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .internal-links.open {
+    display: flex;
+  }
+}
+
 
 .internal-links a {
   text-decoration: none;
