@@ -71,6 +71,9 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
     const STORAGE_KEY = 'cookie-consent';
     const COOKIE_NAME = 'cookie-consent';
     const CF_LOADER_ID = 'cf-analytics-loader';
+    const GA_MEASUREMENT_ID = 'G-21SBNCRV0F';
+    const GA_LOADER_ID = 'ga-analytics-loader';
+    let isGoogleAnalyticsConfigured = false;
 
     const getCookieValue = (name) => {
       const encodedName = `${name}=`;
@@ -124,6 +127,23 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
       document.head.append(script);
     };
 
+    const loadGoogleAnalytics = () => {
+      if (document.getElementById(GA_LOADER_ID)) return;
+
+      const script = document.createElement('script');
+      script.id = GA_LOADER_ID;
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      document.head.append(script);
+    };
+
+    const configureGoogleAnalytics = () => {
+      if (isGoogleAnalyticsConfigured) return;
+      window.gtag('js', new Date());
+      window.gtag('config', GA_MEASUREMENT_ID);
+      isGoogleAnalyticsConfigured = true;
+    };
+
     const updateConsent = (consent) => {
       const granted = Boolean(consent?.analytics);
       window.gtag('consent', 'update', {
@@ -131,6 +151,8 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
       });
 
       if (granted) {
+        loadGoogleAnalytics();
+        configureGoogleAnalytics();
         loadCloudflareAnalytics();
       }
     };
