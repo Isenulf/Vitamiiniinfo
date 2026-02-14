@@ -2,18 +2,12 @@
 import SiteLayout from './SiteLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import { buildBreadcrumbs, getArticleByUrl, getSupportingForGuide, relatedForArticle } from '../data/articles';
+import { allArticles, buildBreadcrumbs, getArticleBlocks, getArticleByUrl } from '../data/articles';
 
 const { frontmatter } = Astro.props;
 const pageUrl = `${Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`}`;
 const current = getArticleByUrl(pageUrl);
-const related = current ? relatedForArticle(current) : [];
-const news = related.filter((entry) => entry.type === 'uudis');
-const practical = related.filter((entry) => entry.type === 'praktiline');
-const moreSame = current?.type === 'supporting' && current.mainGuide
-  ? getSupportingForGuide(current.mainGuide).filter((entry) => entry.url !== current.url)
-  : [];
-const supporting = current?.type === 'pillar' ? getSupportingForGuide(current.url) : [];
+const blocks = current ? getArticleBlocks(current, allArticles) : null;
 const mainGuide = current?.mainGuide ? getArticleByUrl(current.mainGuide) : null;
 const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
 ---
@@ -27,26 +21,27 @@ const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
     <slot />
   </article>
 
-  {supporting.length > 0 && (
+  {blocks && blocks.supporting.items.length > 0 && (
     <section>
-      <h2>Loe lisaks vitamiini kohta</h2>
-      <div class="grid cols-2">{supporting.map((entry) => <ArticleCard article={entry} />)}</div>
+      <h2>{blocks.supporting.title}</h2>
+      <div class="grid cols-2">{blocks.supporting.items.map((entry) => <ArticleCard article={entry} />)}</div>
+      {blocks.supporting.hasMore && blocks.supporting.moreLink && <p><a href={blocks.supporting.moreLink}>Loe rohkem</a></p>}
     </section>
   )}
 
-  {moreSame.length > 0 && (
+  {blocks && blocks.cluster.items.length > 0 && (
     <section>
-      <h2>Rohkem sama vitamiini kohta</h2>
-      <div class="grid cols-2">{moreSame.map((entry) => <ArticleCard article={entry} />)}</div>
+      <h2>{blocks.cluster.title}</h2>
+      <div class="grid cols-3">{blocks.cluster.items.map((entry) => <ArticleCard article={entry} />)}</div>
+      {blocks.cluster.hasMore && blocks.cluster.moreLink && <p><a href={blocks.cluster.moreLink}>Loe rohkem</a></p>}
     </section>
   )}
 
-  {related.length > 0 && (
+  {blocks && blocks.editorial.items.length > 0 && (
     <section>
-      <h2>Seotud teemad</h2>
-      <div class="grid cols-3">{related.map((entry) => <ArticleCard article={entry} />)}</div>
-      {news.length > 0 && <><h2>Uudised selle teema kohta</h2><div class="grid cols-2">{news.map((entry) => <ArticleCard article={entry} />)}</div></>}
-      {practical.length > 0 && <><h2>Praktilised artiklid</h2><div class="grid cols-2">{practical.map((entry) => <ArticleCard article={entry} />)}</div></>}
+      <h2>{blocks.editorial.title}</h2>
+      <div class="grid cols-2">{blocks.editorial.items.map((entry) => <ArticleCard article={entry} />)}</div>
+      {blocks.editorial.hasMore && blocks.editorial.moreLink && <p><a href={blocks.editorial.moreLink}>Loe rohkem</a></p>}
     </section>
   )}
 </SiteLayout>

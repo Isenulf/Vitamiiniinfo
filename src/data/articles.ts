@@ -17,6 +17,19 @@ export interface ArticleMeta {
   mainGuide?: string;
 }
 
+export interface BlockResult {
+  title?: string;
+  items: ArticleMeta[];
+  hasMore: boolean;
+  moreLink?: string;
+}
+
+export interface ArticleBlocks {
+  supporting: BlockResult;
+  cluster: BlockResult;
+  editorial: BlockResult;
+}
+
 const sectionDescriptions: Record<ArticleSection, string> = {
   vitamiinid: 'Kõik, mida pead teadma vitamiinidest – nende rollist organismis, puuduse sümptomitest ja parimatest allikatest.',
   mineraalained: 'Olulised mineraalained, nende mõju tervisele ning praktilised soovitused tasakaalu hoidmiseks.',
@@ -163,6 +176,96 @@ export const relatedForArticle = (article: ArticleMeta) => {
   );
 
   return [...cluster.slice(0, 2), ...editorial.slice(0, 2)];
+};
+
+export const getSharedTopicsCount = (a: ArticleMeta, b: ArticleMeta) => {
+  if (!a.topics.length || !b.topics.length) return 0;
+  const bTopics = new Set(b.topics);
+  let sharedCount = 0;
+
+  for (const topic of a.topics) {
+    if (bTopics.has(topic)) sharedCount += 1;
+  }
+
+  return sharedCount;
+};
+
+export const getParentSectionUrl = (section: ArticleSection) => {
+  if (section === 'kasulik-info-ja-uudised') return '/kasulik-info-ja-uudised/';
+  return sectionMeta[section].href;
+};
+
+const byDateDesc = (a: ArticleMeta, b: ArticleMeta) => +new Date(b.date) - +new Date(a.date);
+
+export const getArticleBlocks = (current: ArticleMeta, articles: ArticleMeta[]): ArticleBlocks => {
+  // Stores URLs that were already shown in an earlier block to avoid duplicates.
+  const usedUrls = new Set<string>();
+  const isPillar = current.type === 'pillar';
+
+  const supportingCandidates: ArticleMeta[] = [];
+  const clusterCandidates: Array<{ article: ArticleMeta; sharedTopics: number }> = [];
+  const editorialCandidates: ArticleMeta[] = [];
+
+  // Single pass over all articles: classify items into candidate pools.
+  for (const article of articles) {
+    if (article.url === current.url) continue;
+
+    if (isPillar && article.mainGuide === current.url) {
+      supportingCandidates.push(article);
+      continue;
+    }
+
+    const sharedTopics = getSharedTopicsCount(current, article);
+    if (sharedTopics === 0) continue;
+
+    if (article.section === 'kasulik-info-ja-uudised') {
+      editorialCandidates.push(article);
+      continue;
+    }
+
+    clusterCandidates.push({ article, sharedTopics });
+  }
+
+  // Block 1: supporting articles for a pillar, latest first.
+  const supportingSorted = supportingCandidates.sort(byDateDesc);
+  const supportingItems = supportingSorted.slice(0, 4);
+  for (const item of supportingItems) usedUrls.add(item.url);
+
+  // Block 2: related cluster articles, ranked by shared topics then freshness.
+  const filteredCluster = clusterCandidates.filter(({ article }) => !usedUrls.has(article.url));
+  const clusterSorted = filteredCluster.sort((a, b) => {
+    if (b.sharedTopics !== a.sharedTopics) return b.sharedTopics - a.sharedTopics;
+    return byDateDesc(a.article, b.article);
+  });
+  const clusterItems = clusterSorted.slice(0, 3).map(({ article }) => article);
+  for (const item of clusterItems) usedUrls.add(item.url);
+
+  // Block 3: editorial materials with shared topics, newest first.
+  const filteredEditorial = editorialCandidates
+    .filter((article) => !usedUrls.has(article.url))
+    .sort(byDateDesc);
+  const editorialItems = filteredEditorial.slice(0, 3);
+
+  return {
+    supporting: {
+      title: `${current.title} huvitab sind? Loe lisaks`,
+      items: isPillar ? supportingItems : [],
+      hasMore: isPillar ? supportingSorted.length > 4 : false,
+      moreLink: isPillar && supportingSorted.length > 4 ? current.url : undefined,
+    },
+    cluster: {
+      title: 'Seotud teemad',
+      items: clusterItems,
+      hasMore: clusterSorted.length > 3,
+      moreLink: clusterSorted.length > 3 ? getParentSectionUrl(current.section) : undefined,
+    },
+    editorial: {
+      title: 'Hea teada',
+      items: editorialItems,
+      hasMore: filteredEditorial.length > 3,
+      moreLink: filteredEditorial.length > 3 ? '/kasulik-info-ja-uudised/' : undefined,
+    },
+  };
 };
 
 export const getSupportingForGuide = (guideUrl: string) =>
