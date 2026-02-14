@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vitamiiniinfo.ee/sitemap.xml
+Sitemap: https://vitamiiniinfo.ee/sitemap-index.xml
