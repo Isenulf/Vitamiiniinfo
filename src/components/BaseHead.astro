@@ -22,6 +22,8 @@ const canonicalURL = canonical
 		? new URL(Astro.url.pathname, Astro.site)
 		: Astro.url;
 const openGraphURL = ogUrl ? new URL(ogUrl) : canonicalURL;
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || '';
 ---
 
 <!-- Global Metadata -->
@@ -35,6 +37,7 @@ const openGraphURL = ogUrl ? new URL(ogUrl) : canonicalURL;
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <meta name="generator" content={Astro.generator} />
+{googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
 
 <!-- Font preloads -->
 <link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
@@ -61,3 +64,88 @@ const openGraphURL = ogUrl ? new URL(ogUrl) : canonicalURL;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, canonicalURL)} />
+
+
+<script is:inline define:vars={{ cloudflareBeaconToken }}>
+  (() => {
+    const STORAGE_KEY = 'cookie-consent';
+    const CONSENT_COOKIE_KEY = 'cookie-consent';
+    const CF_LOADER_ID = 'cf-analytics-loader';
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function gtag() {
+      window.dataLayer.push(arguments);
+    };
+
+    window.gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    });
+
+
+    const parseCookieConsent = () => {
+      const match = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(`${CONSENT_COOKIE_KEY}=`));
+
+      if (!match) return null;
+
+      const encoded = match.slice(CONSENT_COOKIE_KEY.length + 1);
+      try {
+        const parsed = JSON.parse(decodeURIComponent(encoded));
+        if (typeof parsed?.analytics === 'boolean') {
+          return { necessary: true, analytics: parsed.analytics };
+        }
+      } catch {
+        return null;
+      }
+
+      return null;
+    };
+
+    const parseConsent = () => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return parseCookieConsent();
+      if (stored === 'accepted') return { necessary: true, analytics: true };
+      try {
+        const parsed = JSON.parse(stored);
+        if (typeof parsed?.analytics === 'boolean') {
+          return { necessary: true, analytics: parsed.analytics };
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    };
+
+    const loadCloudflareAnalytics = () => {
+      if (!cloudflareBeaconToken || document.getElementById(CF_LOADER_ID)) return;
+      const script = document.createElement('script');
+      script.id = CF_LOADER_ID;
+      script.defer = true;
+      script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      script.setAttribute('data-cf-beacon', JSON.stringify({ token: cloudflareBeaconToken }));
+      document.head.append(script);
+    };
+
+    const updateConsent = (consent) => {
+      const granted = Boolean(consent?.analytics);
+      window.gtag('consent', 'update', {
+        analytics_storage: granted ? 'granted' : 'denied',
+      });
+
+      if (granted) {
+        loadCloudflareAnalytics();
+      }
+    };
+
+    window.__updateCookieConsent = updateConsent;
+
+    const storedConsent = parseConsent();
+    if (storedConsent) {
+      updateConsent(storedConsent);
+    }
+  })();
+</script>

@@ -1,0 +1,184 @@
+<div class="cookie-modal" id="cookie-settings-modal" hidden>
+  <div class="cookie-modal-backdrop" data-cookie-close="true"></div>
+  <section class="cookie-modal-panel" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title">
+    <h2 id="cookie-settings-title">Küpsiste seaded</h2>
+    <p>Saad muuta, milliseid küpsiseid me kasutame.</p>
+
+    <div class="cookie-option">
+      <label for="cookie-necessary">Vajalikud küpsised</label>
+      <input id="cookie-necessary" type="checkbox" checked disabled />
+    </div>
+
+    <div class="cookie-option">
+      <label for="cookie-analytics">Analüütika küpsised</label>
+      <input id="cookie-analytics" type="checkbox" />
+    </div>
+
+    <div class="actions">
+      <button type="button" class="save" data-cookie-modal-action="save">Salvesta valik</button>
+      <button type="button" data-cookie-modal-action="cancel">Tühista</button>
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+  (() => {
+    const STORAGE_KEY = 'cookie-consent';
+    const CONSENT_COOKIE_KEY = 'cookie-consent';
+    const modal = document.getElementById('cookie-settings-modal');
+
+    const parseCookieConsent = () => {
+      const match = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(`${CONSENT_COOKIE_KEY}=`));
+
+      if (!match) return null;
+
+      const encoded = match.slice(CONSENT_COOKIE_KEY.length + 1);
+      try {
+        const parsed = JSON.parse(decodeURIComponent(encoded));
+        return { necessary: true, analytics: Boolean(parsed?.analytics) };
+      } catch {
+        return null;
+      }
+    };
+
+    const writeConsentCookie = (consent) => {
+      const maxAge = 60 * 60 * 24 * 365;
+      document.cookie = `${CONSENT_COOKIE_KEY}=${encodeURIComponent(JSON.stringify(consent))}; Path=/; Max-Age=${maxAge}; SameSite=Lax; Secure`;
+    };
+    const analyticsInput = document.getElementById('cookie-analytics');
+
+    if (!modal || !(analyticsInput instanceof HTMLInputElement)) return;
+
+    const parseConsent = () => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return parseCookieConsent() || { necessary: true, analytics: false };
+      if (stored === 'accepted') return { necessary: true, analytics: true };
+
+      try {
+        const parsed = JSON.parse(stored);
+        return { necessary: true, analytics: Boolean(parsed?.analytics) };
+      } catch {
+        return { necessary: true, analytics: false };
+      }
+    };
+
+    const openModal = () => {
+      const consent = parseConsent();
+      analyticsInput.checked = consent.analytics;
+      modal.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+      modal.setAttribute('hidden', 'hidden');
+      document.body.style.overflow = '';
+    };
+
+    const saveSelection = () => {
+      const consent = { necessary: true, analytics: analyticsInput.checked };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
+      writeConsentCookie(consent);
+      window.__updateCookieConsent?.(consent);
+      window.dispatchEvent(new CustomEvent('cookie-consent:updated', { detail: consent }));
+      closeModal();
+    };
+
+    modal.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+
+      if (target.dataset.cookieClose === 'true') {
+        closeModal();
+      }
+
+      const action = target.dataset.cookieModalAction;
+      if (action === 'save') {
+        saveSelection();
+      }
+
+      if (action === 'cancel') {
+        closeModal();
+      }
+    });
+
+    window.addEventListener('cookie-consent:open-settings', openModal);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hasAttribute('hidden')) {
+        closeModal();
+      }
+    });
+  })();
+</script>
+
+<style>
+  .cookie-modal[hidden] {
+    display: none;
+  }
+
+  .cookie-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+
+  .cookie-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .cookie-modal-panel {
+    position: relative;
+    width: min(520px, 100%);
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 1.25rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
+    display: grid;
+    gap: 1rem;
+  }
+
+  .cookie-modal-panel h2,
+  .cookie-modal-panel p {
+    margin: 0;
+  }
+
+  .cookie-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .cookie-option input {
+    width: 20px;
+    height: 20px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .actions button {
+    border-radius: 0.5rem;
+    border: 1px solid #d5d0cb;
+    background: #fff;
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+  }
+
+  .actions .save {
+    border: none;
+    background: #f18700;
+    color: #fff;
+    font-weight: 700;
+  }
+</style>
