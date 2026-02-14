@@ -27,7 +27,7 @@ src/pages/
       uni-ja-taastumine.md
 ```
 
-- `index.md` обычно основной (pillar) материал.
+- `index.md` обычно основной материал типа `pillar` (лейбл: Ülevaade).
 - Дополнительные статьи можно хранить рядом (`puudus.md`, `kasulikkus.md` и т.д.).
 
 ---
@@ -36,10 +36,10 @@ src/pages/
 
 Во frontmatter у статьи есть `type`:
 
-- `pillar` — главная статья по теме
-- `supporting` — дополнительная статья по теме
-- `uudis` — новость
-- `praktiline` — практическая статья
+- `pillar` — Ülevaade
+- `supporting` — Lisainfo
+- `uudis` — Uudis
+- `praktiline` — Artikkel
 
 Раздел задаётся полем `section`:
 

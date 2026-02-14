@@ -36,6 +36,13 @@ export const sectionMeta: Record<ArticleSection, { title: string; description: s
   },
 };
 
+export const articleTypeLabels: Record<ArticleType, string> = {
+  pillar: 'Ülevaade',
+  supporting: 'Lisainfo',
+  uudis: 'Uudis',
+  praktiline: 'Artikkel',
+};
+
 const pagesRoot = path.join(process.cwd(), 'src/pages');
 
 const findMarkdownFiles = (dir: string, acc: string[] = []) => {
