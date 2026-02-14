@@ -69,7 +69,20 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
 <script is:inline define:vars={{ cloudflareBeaconToken }}>
   (() => {
     const STORAGE_KEY = 'cookie-consent';
+    const COOKIE_NAME = 'cookie-consent';
     const CF_LOADER_ID = 'cf-analytics-loader';
+
+    const getCookieValue = (name) => {
+      const encodedName = `${name}=`;
+      const parts = document.cookie.split(';');
+      for (const part of parts) {
+        const cookie = part.trim();
+        if (cookie.startsWith(encodedName)) {
+          return decodeURIComponent(cookie.slice(encodedName.length));
+        }
+      }
+      return null;
+    };
 
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function gtag() {
@@ -84,17 +97,20 @@ const cloudflareBeaconToken = import.meta.env.PUBLIC_CLOUDFLARE_BEACON_TOKEN || 
     });
 
     const parseConsent = () => {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return null;
-      if (stored === 'accepted') return { necessary: true, analytics: true };
-      try {
-        const parsed = JSON.parse(stored);
-        if (typeof parsed?.analytics === 'boolean') {
-          return { necessary: true, analytics: parsed.analytics };
+      const sources = [localStorage.getItem(STORAGE_KEY), getCookieValue(COOKIE_NAME)];
+      for (const source of sources) {
+        if (!source) continue;
+        if (source === 'accepted') return { necessary: true, analytics: true };
+        try {
+          const parsed = JSON.parse(source);
+          if (typeof parsed?.analytics === 'boolean') {
+            return { necessary: true, analytics: parsed.analytics };
+          }
+        } catch {
+          continue;
         }
-      } catch {
-        return null;
       }
+
       return null;
     };
 
