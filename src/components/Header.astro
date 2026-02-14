@@ -4,29 +4,35 @@ import HeaderLink from './HeaderLink.astro';
 
 <header class="site-header">
   <nav>
-  <a class="brand" href="/" aria-label="Vitamiiniinfo.ee avaleht">
-  <span class="logo" aria-hidden="true">
-    <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M40 10C48 10 54 16 54 24C46 24 40 18 40 10Z"
-            stroke="#F26A21"
-            stroke-width="3"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"/>
-      <path d="M34 14C34 10 38 8 42 8"
-            stroke="#F26A21"
-            stroke-width="3"
-            stroke-linecap="round"/>
-      <circle cx="32" cy="36" r="18"
-              stroke="#F26A21"
-              stroke-width="3"
-              fill="none"/>
-    </svg>
-  </span>
-  <span>Vitamiiniinfo</span>
-</a>
+    <a class="brand" href="/" aria-label="Vitamiiniinfo.ee avaleht">
+      <span class="logo" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 10C48 10 54 16 54 24C46 24 40 18 40 10Z"
+                stroke="currentColor"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <path d="M34 14C34 10 38 8 42 8"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"/>
+          <circle cx="32" cy="36" r="18"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  fill="none"/>
+        </svg>
+      </span>
+      <span>Vitamiiniinfo</span>
+    </a>
 
-    <div class="internal-links">
+    <button class="burger" aria-label="Menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="internal-links" id="nav-links">
       <HeaderLink href="/vitamiinid/">Vitamiinid</HeaderLink>
       <HeaderLink href="/mineraalid/">Mineraalid</HeaderLink>
       <HeaderLink href="/toidulisandid/">Toidulisandid</HeaderLink>
@@ -34,3 +40,13 @@ import HeaderLink from './HeaderLink.astro';
     </div>
   </nav>
 </header>
+
+<script>
+  const burger = document.querySelector('.burger');
+  const nav = document.querySelector('#nav-links');
+
+  burger?.addEventListener('click', () => {
+    nav?.classList.toggle('open');
+    burger.classList.toggle('open');
+  });
+</script>
