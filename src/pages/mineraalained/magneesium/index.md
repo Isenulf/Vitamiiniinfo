@@ -2,7 +2,7 @@
 layout: ../../../layouts/ArticlePage.astro
 title: "Magneesium – põhjalik ülevaade"
 description: "Magneesiumi roll lihastes, närvisüsteemis ja energiavahetuses."
-section: "mineraalid"
+section: "mineraalained"
 type: "pillar"
 date: "2026-01-18"
 topics:

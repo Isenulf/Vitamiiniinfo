@@ -18,7 +18,7 @@ src/pages/
       puudus.md
       kasulikkus.md
 
-  mineraalid/
+  mineraalained/
     magneesium/
       index.md
 
@@ -44,7 +44,7 @@ src/pages/
 Раздел задаётся полем `section`:
 
 - `vitamiinid`
-- `mineraalid`
+- `mineraalained`
 - `toidulisandid`
 - `kasulik-info-ja-uudised`
 
