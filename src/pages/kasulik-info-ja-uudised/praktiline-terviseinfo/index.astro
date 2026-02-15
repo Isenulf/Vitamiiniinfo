@@ -1,12 +1,14 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Schema from '../../../components/Schema.astro';
 import ArticleCard from '../../../components/ArticleCard.astro';
 import { articlesBySection, buildBreadcrumbs } from '../../../data/articles';
 
 const items = articlesBySection('kasulik-info-ja-uudised').filter((entry) => entry.type === 'praktiline');
 ---
 <SiteLayout title="Praktiline terviseinfo | Vitamiiniinfo.ee" description="Praktilised terviseartiklid igapäevaseks kasutamiseks." canonical="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/praktiline-terviseinfo/">
+  <Schema slot="head" pageUrl="/kasulik-info-ja-uudised/praktiline-terviseinfo/" canonicalUrl="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/praktiline-terviseinfo/" pageTitle="Praktiline terviseinfo" pageDescription="Praktilised terviseartiklid igapäevaseks kasutamiseks." categoryName="Praktiline terviseinfo" categoryDescription="Praktilised terviseartiklid igapäevaseks kasutamiseks." categoryItems={items} />
   <Breadcrumbs items={buildBreadcrumbs('/kasulik-info-ja-uudised/praktiline-terviseinfo/')} />
   <h1>Praktiline terviseinfo</h1>
   <div class="grid cols-2">{items.map((article) => <ArticleCard article={article} />)}</div>

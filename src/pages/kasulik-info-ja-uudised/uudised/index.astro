@@ -1,12 +1,14 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Schema from '../../../components/Schema.astro';
 import ArticleCard from '../../../components/ArticleCard.astro';
 import { articlesBySection, buildBreadcrumbs } from '../../../data/articles';
 
 const items = articlesBySection('kasulik-info-ja-uudised').filter((entry) => entry.type === 'uudis');
 ---
 <SiteLayout title="Uudised | Vitamiiniinfo.ee" description="Teadusuuringutel põhinevad terviseuudised." canonical="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/uudised/">
+  <Schema slot="head" pageUrl="/kasulik-info-ja-uudised/uudised/" canonicalUrl="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/uudised/" pageTitle="Uudised" pageDescription="Teadusuuringutel põhinevad terviseuudised." categoryName="Uudised" categoryDescription="Teadusuuringutel põhinevad terviseuudised." categoryItems={items} />
   <Breadcrumbs items={buildBreadcrumbs('/kasulik-info-ja-uudised/uudised/')} />
   <h1>Uudised</h1>
   <div class="grid cols-2">{items.map((article) => <ArticleCard article={article} />)}</div>

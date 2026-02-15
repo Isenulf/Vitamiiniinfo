@@ -1,12 +1,14 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Schema from '../../components/Schema.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { articlesBySection, buildBreadcrumbs, sectionMeta } from '../../data/articles';
 
 const items = articlesBySection('mineraalained').filter((entry) => entry.type === 'pillar');
 ---
 <SiteLayout title="Mineraalained | Vitamiiniinfo.ee" description={sectionMeta.mineraalained.description} canonical="https://vitamiiniinfo.ee/mineraalained/">
+  <Schema slot="head" pageUrl="/mineraalained/" canonicalUrl="https://vitamiiniinfo.ee/mineraalained/" pageTitle="Mineraalained" pageDescription={sectionMeta.mineraalained.description} categoryName="Mineraalained" categoryDescription={sectionMeta.mineraalained.description} categoryItems={items} />
   <Breadcrumbs items={buildBreadcrumbs('/mineraalained/')} />
   <h1>Mineraalained</h1>
   <p>{sectionMeta.mineraalained.description}</p>

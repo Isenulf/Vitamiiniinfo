@@ -1,12 +1,14 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Schema from '../../components/Schema.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { articlesBySection, buildBreadcrumbs, sectionMeta } from '../../data/articles';
 
 const latest = articlesBySection('kasulik-info-ja-uudised').sort((a, b) => +new Date(b.date) - +new Date(a.date));
 ---
 <SiteLayout title="Kasulik info ja uudised | Vitamiiniinfo.ee" description={sectionMeta['kasulik-info-ja-uudised'].description} canonical="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/">
+  <Schema slot="head" pageUrl="/kasulik-info-ja-uudised/" canonicalUrl="https://vitamiiniinfo.ee/kasulik-info-ja-uudised/" pageTitle="Kasulik info ja uudised" pageDescription={sectionMeta['kasulik-info-ja-uudised'].description} categoryName="Kasulik info ja uudised" categoryDescription={sectionMeta['kasulik-info-ja-uudised'].description} categoryItems={latest} />
   <Breadcrumbs items={buildBreadcrumbs('/kasulik-info-ja-uudised/')} />
   <h1>Kasulik info ja uudised</h1>
   <p>{sectionMeta['kasulik-info-ja-uudised'].description}</p>

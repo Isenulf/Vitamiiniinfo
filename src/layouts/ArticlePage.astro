@@ -2,6 +2,7 @@
 import SiteLayout from './SiteLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import Schema from '../components/Schema.astro';
 import { allArticles, buildBreadcrumbs, getArticleBlocks, getArticleByUrl } from '../data/articles';
 
 const { frontmatter } = Astro.props;
@@ -13,6 +14,14 @@ const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
 ---
 
 <SiteLayout title={frontmatter.seoTitle || frontmatter.title} description={frontmatter.seoDescription || frontmatter.description || frontmatter.title} canonical={canonical} type="article">
+  <Schema
+    slot="head"
+    pageUrl={pageUrl}
+    canonicalUrl={canonical}
+    pageTitle={frontmatter.title}
+    pageDescription={frontmatter.description || frontmatter.title}
+    article={current || undefined}
+  />
   <Breadcrumbs items={buildBreadcrumbs(pageUrl)} />
   <article class="article">
     <h1>{frontmatter.title}</h1>
