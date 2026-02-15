@@ -2,6 +2,7 @@
 import SiteLayout from './SiteLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ArticleSidebar from '../components/ArticleSidebar.astro';
+import ArticleCard from '../components/ArticleCard.astro';
 import DosageCard from '../components/DosageCard.astro';
 import Schema from '../components/Schema.astro';
 import { allArticles, buildBreadcrumbs, getArticleBlocks, getArticleByUrl } from '../data/articles';
@@ -12,11 +13,9 @@ const current = getArticleByUrl(pageUrl);
 const blocks = current ? getArticleBlocks(current, allArticles) : null;
 const mainGuide = current?.mainGuide ? getArticleByUrl(current.mainGuide) : null;
 const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
-const isKnowledgeSection = current?.section === 'vitamiinid' || current?.section === 'mineraalained';
-const sidebarLinks = isKnowledgeSection ? blocks?.supporting.items || [] : blocks?.cluster.items || [];
-const sidebarTitle = isKnowledgeSection
-  ? `${current?.title?.replace(/\s+[–-].*$/, '').trim() || 'Pillar'} huvitab sind? Loe lisaks`
-  : 'Seotud teemad';
+const isEditorialSection = current?.section === 'kasulik-info-ja-uudised';
+const sidebarLinks = isEditorialSection ? blocks?.cluster.items || [] : [];
+const sidebarTitle = 'Seotud teemad';
 const hasDosageBlock = Boolean(current?.dosageRows?.length);
 const shouldRenderSidebar = Boolean(blocks && (sidebarLinks.length > 0 || hasDosageBlock));
 const dosageData =
@@ -70,6 +69,22 @@ const dosageData =
       />
     )}
   </div>
+
+  {blocks && !isEditorialSection && blocks.cluster.items.length > 0 && (
+    <section>
+      <h2>{blocks.cluster.title}</h2>
+      <div class="grid cols-3">{blocks.cluster.items.map((entry) => <ArticleCard article={entry} />)}</div>
+      {blocks.cluster.hasMore && blocks.cluster.moreLink && <p><a href={blocks.cluster.moreLink}>Loe rohkem</a></p>}
+    </section>
+  )}
+
+  {blocks && blocks.editorial.items.length > 0 && (
+    <section>
+      <h2>{blocks.editorial.title}</h2>
+      <div class="grid cols-2">{blocks.editorial.items.map((entry) => <ArticleCard article={entry} />)}</div>
+      {blocks.editorial.hasMore && blocks.editorial.moreLink && <p><a href={blocks.editorial.moreLink}>Loe rohkem</a></p>}
+    </section>
+  )}
 
   {dosageData && (
     <script is:inline>
