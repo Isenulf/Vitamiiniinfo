@@ -3,11 +3,12 @@ import { buildBreadcrumbSchema } from './breadcrumbBuilder';
 import { AUTHOR, DEFAULT_IMAGE_URL, EDITOR, PUBLISHER, SITE_URL } from './constants';
 import { buildFaqSchema } from './faqParser';
 import { buildHowToSchema } from './howToParser';
-import { resolveMainGuide, resolveMentions } from './relatedResolver';
+import { resolveIsPartOf, resolveMentions } from './relatedResolver';
 import { buildCategoryGraph } from './categoryBuilder';
 import type { JsonLd, SchemaBuildInput } from './types';
 
 const modifiedCache = new Map<string, string>();
+const nowIso = () => new Date().toISOString();
 
 const toAbsoluteUrl = (value: string) => {
   if (value.startsWith('http://') || value.startsWith('https://')) return value;
@@ -45,6 +46,14 @@ const createHomeGraph = ({ pageTitle, pageDescription, canonicalUrl }: SchemaBui
       name: 'Vitamiiniinfo.ee',
       url: SITE_URL,
       publisher: { '@id': organizationId },
+      inLanguage: 'et-EE',
+      image: DEFAULT_IMAGE_URL,
+      dateModified: nowIso(),
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE_URL}/?s={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
     },
     {
       '@type': 'WebPage',
@@ -53,6 +62,9 @@ const createHomeGraph = ({ pageTitle, pageDescription, canonicalUrl }: SchemaBui
       description: pageDescription,
       url: canonicalUrl,
       isPartOf: { '@id': `${SITE_URL}/#website` },
+      inLanguage: 'et-EE',
+      image: DEFAULT_IMAGE_URL,
+      dateModified: nowIso(),
     },
   ];
 };
@@ -107,8 +119,9 @@ export const buildSchemaGraph = (input: SchemaBuildInput): JsonLd[] => {
     editor: EDITOR,
     publisher: PUBLISHER,
     image,
+    inLanguage: 'et-EE',
     about: article.topics[0] || article.title,
-    isPartOf: resolveMainGuide(article) || undefined,
+    isPartOf: resolveIsPartOf(article),
     mentions: resolveMentions(article),
   };
 

@@ -8,7 +8,7 @@ export const AUTHOR = {
 };
 
 export const EDITOR = {
-  '@type': 'Organization',
+  '@type': 'Person',
   name: 'vitamiiniinfo.ee toimetus',
 };
 
