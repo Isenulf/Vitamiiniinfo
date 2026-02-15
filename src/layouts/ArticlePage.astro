@@ -1,7 +1,9 @@
 ---
 import SiteLayout from './SiteLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ArticleSidebar from '../components/ArticleSidebar.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import DosageCard from '../components/DosageCard.astro';
 import Schema from '../components/Schema.astro';
 import { allArticles, buildBreadcrumbs, getArticleBlocks, getArticleByUrl } from '../data/articles';
 
@@ -11,6 +13,22 @@ const current = getArticleByUrl(pageUrl);
 const blocks = current ? getArticleBlocks(current, allArticles) : null;
 const mainGuide = current?.mainGuide ? getArticleByUrl(current.mainGuide) : null;
 const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
+const isEditorialSection = current?.section === 'kasulik-info-ja-uudised';
+const sidebarLinks = isEditorialSection ? blocks?.cluster.items || [] : blocks?.supporting.items || [];
+const sidebarTitle = isEditorialSection
+  ? 'Seotud teemad'
+  : blocks?.supporting.title || `${current?.title?.replace(/\s+[–-].*$/, '').trim() || 'Pillar'} huvitab sind? Loe lisaks`;
+const hasDosageBlock = Boolean(current?.dosageRows?.length);
+const shouldRenderSidebar = Boolean(blocks && (sidebarLinks.length > 0 || hasDosageBlock));
+const dosageData =
+  hasDosageBlock && current
+    ? {
+        title: current.dosageTitle || `${current.title} - palju võtta?`,
+        rows: current.dosageRows,
+        warning: current.dosageWarning,
+        note: current.dosageNote,
+      }
+    : undefined;
 ---
 
 <SiteLayout title={frontmatter.seoTitle || frontmatter.title} description={frontmatter.seoDescription || frontmatter.description || frontmatter.title} canonical={canonical} type="article">
@@ -23,22 +41,38 @@ const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
     article={current || undefined}
   />
   <Breadcrumbs items={buildBreadcrumbs(pageUrl)} />
-  <article class="article">
-    <h1>{frontmatter.title}</h1>
-    {frontmatter.description && <p>{frontmatter.description}</p>}
-    {mainGuide && <aside class="main-guide"><p>Peamine juhend</p><a href={mainGuide.url}>{mainGuide.title}</a></aside>}
-    <slot />
-  </article>
+  <div class="article-layout">
+    <article class="article">
+      <h1>{frontmatter.title}</h1>
+      {frontmatter.description && <p>{frontmatter.description}</p>}
+      {mainGuide && <aside class="main-guide"><p>Peamine juhend</p><a href={mainGuide.url}>{mainGuide.title}</a></aside>}
+      <slot />
 
-  {blocks && blocks.supporting.items.length > 0 && (
-    <section>
-      <h2>{blocks.supporting.title}</h2>
-      <div class="grid cols-2">{blocks.supporting.items.map((entry) => <ArticleCard article={entry} />)}</div>
-      {blocks.supporting.hasMore && blocks.supporting.moreLink && <p><a href={blocks.supporting.moreLink}>Loe rohkem</a></p>}
-    </section>
-  )}
+      {dosageData && (
+        <template id="annus-template">
+          <DosageCard
+            title={dosageData.title}
+            rows={dosageData.rows}
+            warning={dosageData.warning}
+            note={dosageData.note}
+            className="mobile-annustamine-inline"
+          />
+        </template>
+      )}
+    </article>
 
-  {blocks && blocks.cluster.items.length > 0 && (
+    {shouldRenderSidebar && (
+      <ArticleSidebar
+        dosage={
+          dosageData
+        }
+        linksTitle={sidebarTitle}
+        links={sidebarLinks}
+      />
+    )}
+  </div>
+
+  {blocks && !isEditorialSection && blocks.cluster.items.length > 0 && (
     <section>
       <h2>{blocks.cluster.title}</h2>
       <div class="grid cols-3">{blocks.cluster.items.map((entry) => <ArticleCard article={entry} />)}</div>
@@ -52,5 +86,25 @@ const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
       <div class="grid cols-2">{blocks.editorial.items.map((entry) => <ArticleCard article={entry} />)}</div>
       {blocks.editorial.hasMore && blocks.editorial.moreLink && <p><a href={blocks.editorial.moreLink}>Loe rohkem</a></p>}
     </section>
+  )}
+
+  {dosageData && (
+    <script is:inline>
+      (() => {
+        const marker = '[annus]';
+        const article = document.querySelector('.article');
+        const template = document.getElementById('annus-template');
+        if (!article || !template) return;
+
+        const candidates = article.querySelectorAll('p, li, blockquote');
+        const markerNode = [...candidates].find((node) => node.textContent?.trim() === marker);
+        if (!markerNode) return;
+
+        const clone = template.content.firstElementChild?.cloneNode(true);
+        if (!clone) return;
+
+        markerNode.replaceWith(clone);
+      })();
+    </script>
   )}
 </SiteLayout>

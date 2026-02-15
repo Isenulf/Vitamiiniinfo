@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  rows: Array<{ label: string; value: string }>;
+  warning?: string;
+  note?: string;
+  className?: string;
+}
+
+const { title, rows, warning, note, className } = Astro.props as Props;
+---
+
+<section class={`sidebar-card ${className || ''}`.trim()}>
+  <h2 class="sidebar-card__title">{title}</h2>
+  <dl class="dose-list">
+    {rows.map((row) => (
+      <div class="dose-row">
+        <dt>{row.label}</dt>
+        <dd>{row.value}</dd>
+      </div>
+    ))}
+  </dl>
+  {warning && <p class="dose-warning">{warning}</p>}
+  {note && <p class="dose-note">{note}</p>}
+</section>

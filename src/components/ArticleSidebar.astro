@@ -1,0 +1,50 @@
+---
+import DosageCard from './DosageCard.astro';
+
+interface SidebarLink {
+  title: string;
+  description: string;
+  url: string;
+}
+
+interface Props {
+  dosage?: {
+    title: string;
+    rows: Array<{ label: string; value: string }>;
+    warning?: string;
+    note?: string;
+  };
+  linksTitle: string;
+  links: SidebarLink[];
+}
+
+const { dosage, linksTitle, links } = Astro.props as Props;
+---
+
+<aside class="article-sidebar" aria-label="Lisainfo">
+  <div class="article-sidebar__inner">
+    {dosage && dosage.rows.length > 0 && (
+      <DosageCard
+        title={dosage.title}
+        rows={dosage.rows}
+        warning={dosage.warning}
+        note={dosage.note}
+        className="sidebar-card--dosage"
+      />
+    )}
+
+    {links.length > 0 && (
+      <section class="sidebar-card">
+        <h2 class="sidebar-card__title">{linksTitle}</h2>
+        <ul class="sidebar-links">
+          {links.map((link) => (
+            <li>
+              <a href={link.url}>{link.title}</a>
+              <p>{link.description}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</aside>

@@ -11,6 +11,13 @@ topics:
 cluster: true
 seoTitle: "C-vitamiin: mõju, allikad ja annus | Vitamiiniinfo.ee"
 seoDescription: "Teaduspõhine C-vitamiini juhend: miks see on oluline, kust seda saada ja kui palju päevas tarbida."
+dosageRows:
+  - "Täiskasvanud mehed|90 mg"
+  - "Täiskasvanud naised|75 mg"
+  - "Rasedad|85 mg"
+  - "Suitsetajad|+35 mg"
+dosageWarning: "Ohutu ülempiir: 2000 mg päevas"
+dosageNote: "Vees lahustuv vitamiin – ülejääk eritub organismist."
 ---
 
 C-vitamiin (askorbiinhape) on vees lahustuv vitamiin, millel on oluline roll immuunsüsteemi, kollageeni sünteesi ja raua imendumise toetamisel. Kuna organism ei tooda ega talleta C-vitamiini märkimisväärses koguses, peab seda saama regulaarselt toidust.
@@ -108,4 +115,3 @@ Keemiliselt on askorbiinhape sama, sõltumata allikast. Toidus leiduvad lisaks k
 
 ### Millal on parim aeg C-vitamiini võtta?
 Võib võtta koos toiduga. Tundliku maoga inimestel võib see vähendada seedetrakti ärritust.
-
