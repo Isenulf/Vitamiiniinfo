@@ -14,8 +14,10 @@ const blocks = current ? getArticleBlocks(current, allArticles) : null;
 const mainGuide = current?.mainGuide ? getArticleByUrl(current.mainGuide) : null;
 const canonical = `https://vitamiiniinfo.ee${pageUrl}`;
 const isEditorialSection = current?.section === 'kasulik-info-ja-uudised';
-const sidebarLinks = isEditorialSection ? blocks?.cluster.items || [] : [];
-const sidebarTitle = 'Seotud teemad';
+const sidebarLinks = isEditorialSection ? blocks?.cluster.items || [] : blocks?.supporting.items || [];
+const sidebarTitle = isEditorialSection
+  ? 'Seotud teemad'
+  : blocks?.supporting.title || `${current?.title?.replace(/\s+[–-].*$/, '').trim() || 'Pillar'} huvitab sind? Loe lisaks`;
 const hasDosageBlock = Boolean(current?.dosageRows?.length);
 const shouldRenderSidebar = Boolean(blocks && (sidebarLinks.length > 0 || hasDosageBlock));
 const dosageData =
