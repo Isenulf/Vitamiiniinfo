@@ -193,6 +193,108 @@ Siia tuleb tavatekst…
 - **десктоп**: блок останется в правой sticky-колонке;
 - если маркер не добавлен, мобильный блок остаётся внизу (в сайдбарной секции после статьи).
 
+### Важно про маркер `[annus]`
+
+- Маркер должен быть отдельной строкой (как отдельный абзац).
+- Рекомендуется использовать **один маркер на статью**.
+- Если `dosageRows` не заполнены, маркер ничего не вставит (и просто останется текстом в markdown, поэтому лучше не ставить маркер без данных).
+- Если в статье нет маркера, карточка annustamine на мобильном не вставляется в середину и остаётся в стандартной зоне сайдбара/ниже статьи.
+
+---
+
+## 6.2) Как теперь устроены блоки справа и под статьёй (по разделам)
+
+Ниже — текущая логика вывода блоков на страницах статьи (`ArticlePage`):
+
+### Разделы `vitamiinid`, `mineraalained`, `toidulisandid`
+
+**Справа (sidebar):**
+- `Annustamine` (если есть `dosageRows`)
+- `%Pillar huvitab sind? Loe lisaks` (supporting-материалы)
+
+**Под статьёй (ниже контента):**
+- `Seotud teemad`
+- `Hea teada`
+
+### Раздел `kasulik-info-ja-uudised`
+
+**Справа (sidebar):**
+- `Seotud teemad`
+
+**Под статьёй (ниже контента):**
+- `Hea teada`
+
+Примечание: подбор карточек в этих блоках формируется автоматически из `topics`, `section`, `type`, `mainGuide`.
+
+---
+
+## 6.3) Полный пример pillar-статьи с annustamine + мобильной вставкой
+
+```md
+---
+layout: ../../../layouts/ArticlePage.astro
+title: "Omega-3 rasvhapped – teaduspõhine juhend"
+description: "Kuidas valida omega-3 lisandit ja millal sellest kasu võib olla."
+section: "toidulisandid"
+type: "pillar"
+date: "2026-01-22"
+topics:
+  - omega-3
+  - süda
+  - ajutervis
+cluster: true
+seoTitle: "Omega-3 juhend: valik ja annus | Vitamiiniinfo.ee"
+seoDescription: "Praktiline omega-3 juhend: millal kaaluda lisandit..."
+
+dosageRows:
+  - "Täiskasvanud|250–500 mg EPA + DHA"
+  - "Rasedad|vähemalt 200 mg DHA"
+dosageWarning: "Üle 3 g päevas kasuta arsti nõuandel"
+dosageNote: "Vaata EPA + DHA kogust, mitte ainult kalaõli mg."
+---
+
+## Kuidas võtta
+
+[annus]
+
+Praktiline lähenemine lisandile...
+```
+
+Что получится:
+- на десктопе annustamine будет справа;
+- на мобильном annustamine будет встроен прямо после `## Kuidas võtta`.
+
+---
+
+## 6.4) Быстрый чек-лист перед публикацией
+
+1. Проверить `section`, `type`, `topics`.
+2. Для supporting-материала проверить `mainGuide`.
+3. Если нужен annustamine:
+   - добавить `dosageRows`;
+   - при необходимости `dosageWarning`/`dosageNote`;
+   - если нужна вставка в тело на mobile — добавить `[annus]` в нужное место.
+4. Проверить `seoTitle` и `seoDescription`.
+5. Запустить `npm run build`.
+
+---
+
+## 6.5) Частые ошибки редактора
+
+- **`dosageRows` без разделителя `|`**
+  - Неправильно: `"Täiskasvanud 250 mg"`
+  - Правильно: `"Täiskasvanud|250 mg"`
+
+- **Случайные разные теги для одной темы**
+  - Например: `c-vitamiin`, `vitamiin-c`, `C Vitamiin`.
+  - Лучше выбрать один стандарт и использовать везде одинаково.
+
+- **`mainGuide` без завершающего `/`**
+  - Лучше использовать URL в формате `"/vitamiinid/c-vitamiin/"`.
+
+- **Маркер `[annus]` вставлен, но нет `dosageRows`**
+  - Блок не отрисуется как карточка, поэтому проверяйте frontmatter вместе с контентом.
+
 ---
 
 ## 7) Полезные примеры из проекта
