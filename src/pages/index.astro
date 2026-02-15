@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import Schema from '../components/Schema.astro';
 import { latestArticles, sectionMeta } from '../data/articles';
 
 const sections = Object.values(sectionMeta);
@@ -12,6 +13,7 @@ const featuredArticles = latestArticles.slice(0, 4);
   description="Vitamiinid, mineraalained, toidulisandid ja praktiline terviseinfo usaldusväärses, SEO-first teadmistebaasis."
   canonical="https://vitamiiniinfo.ee/"
 >
+  <Schema slot="head" pageUrl="/" canonicalUrl="https://vitamiiniinfo.ee/" pageTitle="Vitamiiniinfo.ee – teaduspõhine terviseportaal" pageDescription="Vitamiinid, mineraalained, toidulisandid ja praktiline terviseinfo usaldusväärses, SEO-first teadmistebaasis." isHomePage={true} />
   <section class="hero">
     <p class="hero-icon" aria-hidden="true">🍊</p>
     <h1>Teaduspõhine info vitamiinide ja toidulisandite kohta</h1>

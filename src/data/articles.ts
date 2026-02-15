@@ -5,6 +5,7 @@ export type ArticleSection = 'vitamiinid' | 'mineraalained' | 'toidulisandid' | 
 export type ArticleType = 'pillar' | 'supporting' | 'uudis' | 'praktiline';
 
 export interface ArticleMeta {
+  filePath: string;
   url: string;
   title: string;
   description: string;
@@ -12,9 +13,13 @@ export interface ArticleMeta {
   section: ArticleSection;
   type: ArticleType;
   topics: string[];
+  heroImage?: string;
+  intent?: 'puudus' | 'sümptomid' | 'ravi' | 'uleannustamine';
+  howTo?: boolean;
   cluster?: boolean;
   categorySlug?: 'uudised' | 'praktiline-terviseinfo';
   mainGuide?: string;
+  rawContent: string;
 }
 
 export interface BlockResult {
@@ -114,6 +119,8 @@ const filePathToUrl = (filePath: string) => {
 
 const files = findMarkdownFiles(pagesRoot);
 
+const extractRawContent = (raw: string) => raw.replace(/^---\n[\s\S]*?\n---\n?/, '');
+
 export const allArticles: ArticleMeta[] = files
   .map((filePath) => {
     const raw = fs.readFileSync(filePath, 'utf-8');
@@ -121,6 +128,7 @@ export const allArticles: ArticleMeta[] = files
     if (!fm.section || !fm.type || !fm.title) return null;
 
     return {
+      filePath,
       url: filePathToUrl(filePath),
       title: fm.title,
       description: fm.description || fm.title,
@@ -128,9 +136,13 @@ export const allArticles: ArticleMeta[] = files
       section: fm.section,
       type: fm.type,
       topics: Array.isArray(fm.topics) ? fm.topics : [],
+      heroImage: fm.heroImage,
+      intent: fm.intent,
+      howTo: Boolean(fm.howTo),
       cluster: Boolean(fm.cluster),
       categorySlug: fm.categorySlug,
       mainGuide: fm.mainGuide,
+      rawContent: extractRawContent(raw),
     } as ArticleMeta;
   })
   .filter((entry): entry is ArticleMeta => Boolean(entry));

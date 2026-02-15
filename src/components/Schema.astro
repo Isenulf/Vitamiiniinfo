@@ -1,0 +1,24 @@
+---
+import { buildSchemaGraph } from '../lib/schema/buildMedicalSchema';
+import type { ArticleMeta } from '../data/articles';
+
+interface Props {
+  pageUrl: string;
+  canonicalUrl: string;
+  pageTitle: string;
+  pageDescription: string;
+  article?: ArticleMeta;
+  categoryItems?: ArticleMeta[];
+  categoryName?: string;
+  categoryDescription?: string;
+  isHomePage?: boolean;
+}
+
+const graph = buildSchemaGraph(Astro.props as Props);
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': graph,
+};
+---
+
+{graph.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
