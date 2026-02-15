@@ -12,6 +12,13 @@ topics:
 cluster: true
 seoTitle: "D-vitamiin: immuunsus ja annustamine | Vitamiiniinfo.ee"
 seoDescription: "D-vitamiini juhend Eesti tingimustes: allikad, mõju tervisele ja praktilised annustamise põhimõtted."
+dosageRows:
+  - "Täiskasvanud (sügis-talv)|20 µg"
+  - "Üle 60-aastased|20 µg"
+  - "Rasedad ja imetavad|20 µg"
+  - "Lapsed 1+|10 µg"
+dosageWarning: "Pikaajalisel suurtarbimisel jälgi vereanalüüsi"
+dosageNote: "D-vitamiini vajadus sõltub hooajast, päikesest ja individuaalsest tasemest."
 ---
 
 <p>D-vitamiin aitab reguleerida kaltsiumi ainevahetust ning toetab immuunsüsteemi normaalset talitlust.</p>

@@ -12,6 +12,12 @@ topics:
 cluster: true
 seoTitle: "Omega-3 juhend: valik ja annus | Vitamiiniinfo.ee"
 seoDescription: "Praktiline omega-3 juhend: millal kaaluda lisandit, kuidas lugeda etiketti ja mida annusest teada."
+dosageRows:
+  - "Täiskasvanud (üldine tugi)|250–500 mg EPA + DHA"
+  - "Rasedad/imetavad (DHA)|vähemalt 200 mg DHA"
+  - "Kõrged triglütseriidid|2–4 g EPA + DHA (arsti jälgimisel)"
+dosageWarning: "Üle 3 g päevas kasuta arsti nõuandel, eriti verevedeldajatega"
+dosageNote: "Vaata alati EPA + DHA kogust, mitte ainult kalaõli mg kapslis."
 ---
 
 Omega-3 rasvhapped (EPA ja DHA) on olulised südame ja aju normaalseks talitluseks. Neid leidub eelkõige rasvases kalas, kuid vajadusel võib kaaluda ka toidulisandit.
@@ -54,6 +60,17 @@ Teadusuuringud seostavad omega-3 rasvhappeid järgmiste mõjudega:
 - Kõrgema triglütseriidide taseme korral võib arst soovitada suuremaid annuseid  
 
 Oluline on vaadata just **EPA + DHA kogust**, mitte ainult „kalaõli“ kogust kapslis.
+
+## Kuidas võtta
+
+[annus]
+
+Praktiline lähenemine omega-3 lisandile:
+
+- alusta annusest, mis katab **250–500 mg EPA + DHA päevas**
+- võta kapsel **koos toidukorraga**, et parandada imendumist
+- kontrolli etiketilt, mitu mg on just **EPA + DHA**, mitte ainult "kalaõli"
+- suuremate annuste (mitu grammi päevas) puhul pea nõu arstiga
 
 ## Kas toidust piisab?
 

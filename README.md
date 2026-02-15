@@ -97,6 +97,31 @@ seoDescription: "Короткое SEO-описание"
 - `mainGuide`: для `supporting` статьи ссылка на основной материал, например:
   - `mainGuide: "/vitamiinid/c-vitamiin/"`
 
+### Поля для блока annustamine (дозировки)
+
+Если хотите показать карточку дозировок (annustamine), добавьте во frontmatter:
+
+- `dosageTitle` *(опционально)* — заголовок карточки.
+  - Если не задан, заголовок собирается автоматически по статье (`<Pillar name> - palju võtta?`).
+- `dosageRows` *(обязательно для показа блока)* — массив строк в формате:
+  - `"Label|Value"`
+- `dosageWarning` *(опционально)* — выделенная строка-предупреждение.
+- `dosageNote` *(опционально)* — нижняя поясняющая строка.
+
+Пример:
+
+```md
+dosageRows:
+  - "Täiskasvanud|250–500 mg EPA + DHA"
+  - "Rasedad|vähemalt 200 mg DHA"
+dosageWarning: "Üle 3 g päevas kasuta arsti nõuandel"
+dosageNote: "Vaata EPA + DHA kogust, mitte ainult kalaõli mg."
+```
+
+Важно:
+- если `dosageRows` нет, annustamise plokk не выводится;
+- это работает для всех разделов (`vitamiinid`, `mineraalained`, `toidulisandid`, `kasulik-info-ja-uudised`).
+
 ---
 
 ## 5) Как работает перелинковка
@@ -144,6 +169,29 @@ npm run build
 ```
 
 Если build прошёл — маршрут и страница собраны корректно.
+
+---
+
+## 6.1) Как вставить annustamise plokk внутрь статьи на мобильном
+
+Теперь можно управлять местом блока в тексте статьи с помощью короткого маркера:
+
+- вставьте отдельной строкой: `[annus]`
+
+Рекомендуемый сценарий:
+
+```md
+## Kuidas võtta
+
+[annus]
+
+Siia tuleb tavatekst…
+```
+
+Как это работает:
+- **мобильная версия**: блок дозировок подставится прямо в место `[annus]`;
+- **десктоп**: блок останется в правой sticky-колонке;
+- если маркер не добавлен, мобильный блок остаётся внизу (в сайдбарной секции после статьи).
 
 ---
 

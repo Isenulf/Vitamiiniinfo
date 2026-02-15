@@ -243,8 +243,102 @@ p {
 .breadcrumbs a { text-decoration: none; }
 .breadcrumbs li:not(:last-child)::after { content: '›'; margin-left: 0.65rem; color: #9c8f84; }
 
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
 .article { max-width: 760px; }
 .article ul { color: var(--muted); }
+
+.article-sidebar {
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+}
+
+.article-sidebar__inner {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.sidebar-card {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--card);
+  padding: 1rem;
+}
+
+.sidebar-card__title {
+  font-size: 1.55rem;
+  margin: 0 0 0.9rem;
+}
+
+.dose-list {
+  margin: 0;
+}
+
+.dose-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dose-row:last-child {
+  border-bottom: 0;
+}
+
+.dose-row dt,
+.dose-row dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.dose-row dd {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.dose-warning {
+  margin: 0.7rem 0 0.45rem;
+  background: var(--primary-soft);
+  color: #9e4a16;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.92rem;
+}
+
+.dose-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #746c66;
+}
+
+.sidebar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.sidebar-links a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar-links p {
+  margin: 0.2rem 0 0;
+  font-size: 0.94rem;
+  color: #6f655c;
+}
+
+.mobile-annustamine-inline {
+  display: none;
+  margin: 1rem 0 1.25rem;
+}
 
 .main-guide {
   margin: 1rem 0 1.2rem;
@@ -336,4 +430,32 @@ p {
   .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
   .trust { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .article-layout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .article-sidebar {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+    padding-top: 0;
+    padding-left: 1.5rem;
+  }
+
+  .article-sidebar__inner {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+@media (max-width: 759px) {
+  .mobile-annustamine-inline {
+    display: block;
+  }
+
+  .sidebar-card--dosage {
+    display: none;
+  }
 }

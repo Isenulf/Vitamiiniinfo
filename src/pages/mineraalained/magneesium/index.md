@@ -12,6 +12,13 @@ topics:
 cluster: true
 seoTitle: "Magneesium: roll, allikad ja vajadus | Vitamiiniinfo.ee"
 seoDescription: "Usaldusväärne magneesiumi ülevaade: milleks see vajalik on ja kuidas tarbimist tasakaalus hoida."
+dosageRows:
+  - "Täiskasvanud naised|300–320 mg"
+  - "Täiskasvanud mehed|350–420 mg"
+  - "Rasedad|310–360 mg"
+  - "Imetavad|310–320 mg"
+dosageWarning: "Toidulisanditest üle 250 mg võib põhjustada seedevaevusi"
+dosageNote: "Arvesta kogu päeva kogust: toit + toidulisand."
 ---
 
 Magneesium osaleb sadades ensümaatilistes protsessides ja toetab närvi-lihastalitlust. Tegemist on ühe olulisema mineraaliga organismis, mis mõjutab nii lihaseid, närvisüsteemi kui ka energiavahetust.

@@ -19,6 +19,10 @@ export interface ArticleMeta {
   cluster?: boolean;
   categorySlug?: 'uudised' | 'praktiline-terviseinfo';
   mainGuide?: string;
+  dosageTitle?: string;
+  dosageRows?: Array<{ label: string; value: string }>;
+  dosageWarning?: string;
+  dosageNote?: string;
   rawContent: string;
 }
 
@@ -121,6 +125,21 @@ const files = findMarkdownFiles(pagesRoot);
 
 const extractRawContent = (raw: string) => raw.replace(/^---\n[\s\S]*?\n---\n?/, '');
 
+const normalizePillarName = (title: string) => title.replace(/\s+[–-].*$/, '').trim();
+
+const parseDosageRows = (rows: unknown): Array<{ label: string; value: string }> => {
+  if (!Array.isArray(rows)) return [];
+
+  return rows
+    .map((row) => {
+      if (typeof row !== 'string') return null;
+      const [label, value] = row.split('|').map((item) => item?.trim());
+      if (!label || !value) return null;
+      return { label, value };
+    })
+    .filter((row): row is { label: string; value: string } => Boolean(row));
+};
+
 export const allArticles: ArticleMeta[] = files
   .map((filePath) => {
     const raw = fs.readFileSync(filePath, 'utf-8');
@@ -142,10 +161,20 @@ export const allArticles: ArticleMeta[] = files
       cluster: Boolean(fm.cluster),
       categorySlug: fm.categorySlug,
       mainGuide: fm.mainGuide,
+      dosageTitle: fm.dosageTitle || undefined,
+      dosageRows: parseDosageRows(fm.dosageRows),
+      dosageWarning: fm.dosageWarning || undefined,
+      dosageNote: fm.dosageNote || undefined,
       rawContent: extractRawContent(raw),
     } as ArticleMeta;
   })
   .filter((entry): entry is ArticleMeta => Boolean(entry));
+
+for (const article of allArticles) {
+  if (article.dosageRows && article.dosageRows.length > 0 && !article.dosageTitle) {
+    article.dosageTitle = `${normalizePillarName(article.title)} - palju võtta?`;
+  }
+}
 
 export const formatDate = (dateValue: string) =>
   new Date(dateValue).toLocaleDateString('et-EE', { day: 'numeric', month: 'long', year: 'numeric' });
